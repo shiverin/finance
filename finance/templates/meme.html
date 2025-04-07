@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Meme
+{% endblock %}
+
+{% block main %}
+<form action="/meme" method="post">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="top" placeholder="Top Text" type="text">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" autocomplete="off" name="bottom" placeholder="Bottom Text" type="text">
+    </div>
+    <button class="btn btn-primary" type="submit">Generate</button>
+</form>
+{% endblock %}
