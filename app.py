@@ -1,6 +1,7 @@
 import os
 import psycopg2
 import urllib.parse
+import psycopg2.extras
 
 from flask import Flask, flash, redirect, render_template, request, session, g
 from flask_session import Session
