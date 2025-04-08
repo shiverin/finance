@@ -247,3 +247,28 @@ def topup():
         conn.close()
         return redirect("/")
     return render_template("topup.html")
+
+@app.route("/debug_all")
+def debug_all():
+    # Establish a connection to the database
+    conn = get_db()
+    cur = conn.cursor()
+
+    # Query the 'users' table
+    cur.execute("SELECT * FROM users")
+    users = cur.fetchall()
+
+    # Query the 'portfolio' table
+    cur.execute("SELECT * FROM portfolio")
+    portfolio = cur.fetchall()
+
+    # Query the 'logs' table
+    cur.execute("SELECT * FROM logs")
+    logs = cur.fetchall()
+
+    # Close the connection
+    cur.close()
+    conn.close()
+
+    # Return the data as a string (for debugging purposes)
+    return f"Users: {users}<br>Portfolio: {portfolio}<br>Logs: {logs}"
