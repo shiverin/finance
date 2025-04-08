@@ -304,3 +304,7 @@ def query():
         return render_template("query.html", query=query_text, results=results, headers=headers, error=error)
 
     return render_template("query.html", query=query_text)
+
+if __name__ == "__main__":
+    # Make sure the app runs on all network interfaces and on the specified port
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
