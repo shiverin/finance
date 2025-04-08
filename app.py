@@ -248,63 +248,6 @@ def topup():
         return redirect("/")
     return render_template("topup.html")
 
-@app.route("/debug_all")
-def debug_all():
-    # Establish a connection to the database
-    conn = get_db()
-    cur = conn.cursor()
-
-    # Query the 'users' table
-    cur.execute("SELECT * FROM users")
-    users = cur.fetchall()
-
-    # Query the 'portfolio' table
-    cur.execute("SELECT * FROM portfolio")
-    portfolio = cur.fetchall()
-
-    # Query the 'logs' table
-    cur.execute("SELECT * FROM logs")
-    logs = cur.fetchall()
-
-    # Close the connection
-    cur.close()
-    conn.close()
-
-    # Return the data as a string (for debugging purposes)
-    return f"Users: {users}<br>Portfolio: {portfolio}<br>Logs: {logs}"
-
-@app.route("/query", methods=["GET", "POST"])
-def query():
-    results = None
-    error = None
-    query_text = ""
-
-    if request.method == "POST":
-        query_text = request.form.get("query")
-        try:
-            conn = get_db()
-            cur = conn.cursor()
-            cur.execute(query_text)
-
-            if cur.description:  # SELECT queries
-                results = cur.fetchall()
-                headers = [desc[0] for desc in cur.description]
-            else:  # INSERT/UPDATE/DELETE
-                conn.commit()
-                results = [["Query executed successfully."]]
-                headers = ["Status"]
-
-            cur.close()
-            conn.close()
-        except Exception as e:
-            error = str(e)
-            results = None
-            headers = None
-
-        return render_template("query.html", query=query_text, results=results, headers=headers, error=error)
-
-    return render_template("query.html", query=query_text)
-
 if __name__ == "__main__":
     # Make sure the app runs on all network interfaces and on the specified port
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
