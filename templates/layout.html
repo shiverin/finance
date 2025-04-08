@@ -87,7 +87,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for row in rows%}
+                        {#{% for row in rows%}
                         <tr>
                             {% set price=lookup(row.symbol)["price"] %}
                             {% set quantity = row.quantity %}
@@ -96,6 +96,23 @@
                             <td>{{price|usd}}</td>
                             <td>{{(price*quantity)|usd}}</td>
                         </tr>
+                        {% endfor %}#}
+                        {% for row in rows %}
+                            {% set stock = lookup(row.symbol) %}
+                            {% if stock %}
+                                {% set price = stock["price"] %}
+                                {% set quantity = row.quantity %}
+                                <tr>
+                                    <td>{{ row.company }}</td>
+                                    <td>{{ quantity }}</td>
+                                    <td>{{ price | usd }}</td>
+                                    <td>{{ (price * quantity) | usd }}</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="4">Unable to fetch data for {{ row.symbol }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
