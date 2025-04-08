@@ -106,7 +106,7 @@
                                     <td>{{ row.company }}</td>
                                     <td>{{ quantity }}</td>
                                     <td>{{ price | usd }}</td>
-                                    <td>{{ (price * quantity) | usd }}</td>
+                                    <td>{{ (price * quantity|float) | usd }}</td>
                                 </tr>
                             {% else %}
                                 <tr>
