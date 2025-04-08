@@ -272,3 +272,35 @@ def debug_all():
 
     # Return the data as a string (for debugging purposes)
     return f"Users: {users}<br>Portfolio: {portfolio}<br>Logs: {logs}"
+
+@app.route("/query", methods=["GET", "POST"])
+def query():
+    results = None
+    error = None
+    query_text = ""
+
+    if request.method == "POST":
+        query_text = request.form.get("query")
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute(query_text)
+
+            if cur.description:  # SELECT queries
+                results = cur.fetchall()
+                headers = [desc[0] for desc in cur.description]
+            else:  # INSERT/UPDATE/DELETE
+                conn.commit()
+                results = [["Query executed successfully."]]
+                headers = ["Status"]
+
+            cur.close()
+            conn.close()
+        except Exception as e:
+            error = str(e)
+            results = None
+            headers = None
+
+        return render_template("query.html", query=query_text, results=results, headers=headers, error=error)
+
+    return render_template("query.html", query=query_text)
